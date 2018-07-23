@@ -5,7 +5,6 @@ from datetime import datetime, time, timedelta, date
 import os
 from dateutil import parser
 from pytz import timezone, utc
-from tornado.escape import native_str
 
 UTC_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
 SQL_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -36,7 +35,10 @@ def datetime_2_string(_datetime, _format=UTC_DATETIME_FORMAT):
 
 
 def datetime_2_isoformat(_dt):
-    return _dt.isoformat()
+    if _dt:
+        return _dt.isoformat()
+    else:
+        return None
 
 
 def date_2_string(_date, _format=DATE_FORMAT):
@@ -100,7 +102,7 @@ def utc_now_dt_str():
 # if __name__ == '__main__':
 #     from datetime import date
 #     _today = date.today()
-#     a = date_2_string(_today)
-#     b = string_2_date(a)
+#     a.json = date_2_string(_today)
+#     b = string_2_date(a.json)
 #
-#     print(a, type(a), b, type(b))
+#     print(a.json, type(a.json), b, type(b))

@@ -8,10 +8,11 @@ from gino.ext.sanic import Gino
 
 # --------------------     Application     --------------------
 app = Sanic()
+APP_PORT = getenv("APP_PORT", "8000")
 
 # --------------------     Database     --------------------
 
-DB_USER = getenv("DB_HOST", "postgres")
+DB_USER = getenv("DB_USER", "postgres")
 DB_PASS = getenv("DB_PASS", "postgres")
 
 DB_HOST = getenv("DB_HOST", "localhost")
@@ -24,8 +25,8 @@ DB_DSN = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME
 db = Gino()
 
 # --------------------     ORM     --------------------
-PLAT_ANDROID = "Android"
-PLAT_IOS = "iOS"
+PLAT_ANDROID = "android"
+PLAT_IOS = "ios"
 
 # --------------------     Path     --------------------
 SETTINGS_FILE_PATH = Path(__file__).absolute()
