@@ -14,7 +14,7 @@ docker run -it -e TZ=Asia/Shanghai -v /data/app_data:/app_manager/sanic_manager/
     |parameter|意义|默认值|要求|
     |---|---|---|---|
     |name|项目名字|`""`(空，不传)|英文字符|
-    |platform|平台|`""`(空，不传)|`iOS` \| `Android` \| `""`(空)， 大小写不敏感|
+    |platform|平台|`""`(空，不传)|`iOS` or `Android` | `""`(空)， 大小写不敏感|
     |page|页数|1| page > 0|
     |items|每页个数|10|50 >= items > 0|
     
@@ -95,7 +95,7 @@ docker run -it -e TZ=Asia/Shanghai -v /data/app_data:/app_manager/sanic_manager/
 
     |parameter|意义|默认值|可选范围|
     |---|---|---|---|
-    |platform|平台|无|`iOS` \| `Android` 大小写不敏感|
+    |platform|平台|无|`iOS` or `Android` 大小写不敏感|
     
     示例：`http://localhost:8888/current/android` `http:localhost:8888/current/ios`
     
@@ -120,7 +120,7 @@ docker run -it -e TZ=Asia/Shanghai -v /data/app_data:/app_manager/sanic_manager/
 
     |parameter|意义|默认值|要求|
     |---|---|---|---|
-    |platform|平台|无|`iOS` \| `Android` 大小写不敏感|
+    |platform|平台|无|`iOS` or `Android` 大小写不敏感|
     
     示例：`http://localhost:8888/current/android` `http:localhost:8888/current/ios`
     
@@ -142,7 +142,7 @@ docker run -it -e TZ=Asia/Shanghai -v /data/app_data:/app_manager/sanic_manager/
             |字段名|意义|json类型|
             |---|---|---|
             | version |当前版本号|number or **null**|
-            |platform|平台, `iOS` \| `Android` 大小写不敏感|string|
+            |platform|平台, `iOS` or `Android` 大小写不敏感|string|
             | file |文件地址|string or **null**|
             |create_at|创建时间|string or **null**|
 
