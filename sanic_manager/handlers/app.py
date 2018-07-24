@@ -4,17 +4,15 @@ from math import ceil
 from os import remove
 from pathlib import Path
 
+from sqlalchemy import desc
 from sanic.exceptions import abort
 from sanic.response import json, file_stream
 from sanic.views import HTTPMethodView
 from sanic.log import logger as logging
-
 from schema import Schema, Optional, Use, And
-from sqlalchemy import desc
 
 from sanic_manager.models.app import App
 from sanic_manager.utils.gtz import datetime_2_isoformat
-
 from sanic_manager.settings import PLAT_ANDROID, PLAT_IOS, db
 
 
@@ -99,7 +97,7 @@ class AppListView(HTTPMethodView):
 
 
 def get_current_app_version(name, platform):
-    return App.query.with_only_columns([App.file]). \
+    return App.query.with_only_columns([App.file, App.version, App.create_at]). \
         where(App.platform == platform).where(App.name == name). \
         where(App.is_active == True). \
         order_by(desc(App.id)). \
@@ -150,3 +148,61 @@ class AppCurrentVersionDownloadView(HTTPMethodView):
                                      filename=file_path.name)
         else:
             return abort(400, "no app found")
+
+
+# noinspection PyUnusedLocal
+class ActivateVersionView(HTTPMethodView):
+    async def put(self, request, app_id):
+        try:
+            app_id = int(app_id)
+        except Exception as e:
+            abort(400, str(e))
+
+        app = await App.get(app_id)
+        if not app:
+            abort(400, f"app:{app_id} not found")
+
+        if app.is_active is True:
+            return json(app.json_format(), 201)
+
+        try:
+            async with db.transaction():
+                # 将其他版本关闭
+                rst = await App.update.values(is_active=False). \
+                    where(App.name == app.name). \
+                    where(App.platform == app.platform). \
+                    where(App.is_active == True). \
+                    gino.status()
+                logging.info(rst)
+                # 将该版本开启
+                await app.update(is_active=True).apply()
+        except Exception as e:
+            abort(500, str(e))
+        else:
+            return json(app.json_format(), 201)
+
+
+# noinspection PyUnusedLocal
+class DeactivateVersionView(HTTPMethodView):
+    async def put(self, request, app_id):
+        try:
+            app_id = int(app_id)
+        except Exception as e:
+            abort(400, str(e))
+
+        app = await App.get(app_id)
+        if app.is_active is False:
+            return json(app.json_format(), 201)
+
+        try:
+            # with db.transaction():
+                # await App.update.values(is_active=False). \
+                #     where(App.name == app.name). \
+                #     where(App.platform == app.platform). \
+                #     where(App.is_active == True). \
+                #     gino.status()
+            await app.update(is_active=False).apply()
+        except Exception as e:
+            abort(500, str(e))
+        else:
+            return json(app.json_format(), 201)

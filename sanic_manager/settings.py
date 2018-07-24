@@ -8,7 +8,7 @@ from gino.ext.sanic import Gino
 
 # --------------------     Application     --------------------
 app = Sanic()
-APP_PORT = getenv("APP_PORT", "8000")
+APP_PORT = getenv("APP_PORT", "8888")
 
 # --------------------     Database     --------------------
 

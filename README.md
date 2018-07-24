@@ -150,11 +150,24 @@ docker run -it -e TZ=Asia/Shanghai -v /data/app_data:/app_manager/sanic_manager/
 
 
 ---
-### active new version
+### activate new version
 * URL `PUT` `/app/<app_id>/active`
+* Return
+
+    ```json
+    {
+        "id": 2,
+        "name": "zhdj",
+        "version": 2,
+        "platform": "ios",
+        "is_active": true,
+        "file": "/uploads/zhdj-ios-2-ndqa4d5nl0k-stephy-pariande.jpg",
+        "create_at": "2018-07-24T07:30:08.352493+00:00"
+    }
+    ```
 
 ---
-### deactive version
+### deactivate version
 * URL `PUT` `/app/<app_id>/deactive`
 
 
